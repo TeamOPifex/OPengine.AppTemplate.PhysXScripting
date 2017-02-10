@@ -8,7 +8,7 @@ SET(OPIFEX_ENGINE_REPOSITORY CACHE STRING "../OPengine/")
 # it then sets up all of the OPifex Engine links
 include(CMake/application.cmake)
 
-
+add_marketplace_addons_projects()
 
 
 #########################################
@@ -37,6 +37,7 @@ add_asset_dir(APPLICATION_SRC)
 add_opifex_executable(9_Application ${APPLICATION_SRC})
 
 add_opifex_definitions(9_Application "")
+add_marketplace_addons(9_Application "${BINARY_RELEASE_MODE}/" OPIFEX_ASSETS_ADDITIONAL)
 add_opifex_defines()
 set_target_properties(9_Application PROPERTIES OUTPUT_NAME "YOURAPPNAME")
 add_opifex_libraries(9_Application)

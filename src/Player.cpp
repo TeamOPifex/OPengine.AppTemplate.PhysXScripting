@@ -11,7 +11,7 @@ Player::Player(OPscene* scene) {
 	rendererEntity->world.SetIdentity();
 
 	OPphysXMaterial* material = OPphysXCreateMaterial(1.0, 1.0, 1.0); // OPphysXCreateMaterial(0.8, 0.8, 0.6);
-	physX = OPphysXControllerCreate(PHYSX_CONTROLLERMANAGER, material, 1, 0.5, NULL, NULL, NULL, NULL);
+	physX = OPphysXControllerCreate(PHYSX_CONTROLLERMANAGER, material, 0.5, 0.25, NULL, NULL, NULL, NULL);
 	OPphysXControllerSetPos(physX, position);
 	physX->setStepOffset(0.1);
 }
@@ -119,10 +119,10 @@ void Player::RenderDebug() {
 #ifdef _DEBUG
 #ifdef ADDON_imgui
 
-	ImGui::InputInt("Health", &health);
-	if (ImGui::InputFloat3("Position", (float*)&position, -20, 20)) {
-		OPphysXControllerSetPos(physX, position);
-	}
+	//ImGui::InputInt("Health", &health);
+	//if (ImGui::InputFloat3("Position", (float*)&position, -20, 20)) {
+	//	OPphysXControllerSetPos(physX, position);
+	//}
 
 #endif
 #endif

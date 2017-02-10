@@ -4,6 +4,7 @@
 #include "./OPengine.h"
 #include "Main.h"
 #include "GameState.h"
+#include "SceneLoader.h"
 
 //////////////////////////////////////
 // Application Methods
@@ -27,6 +28,7 @@ void ApplicationInit() {
 	OPCMAN.Init(OPIFEX_ASSETS);
 	OPloadersAddDefault();
 	OPscriptAddLoader();
+	SceneAddLoader();
 
 	OPrenderSetup();
 

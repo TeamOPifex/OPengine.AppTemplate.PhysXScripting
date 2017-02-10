@@ -2,10 +2,11 @@
 
 #include "./OPengine.h"
 #include "Player.h"
+#include "StaticEntity.h"
+#include "DynamicAllocator.h"
 
 class GameState : public OPgameState {
 	OPjavaScriptV8Compiled SCRIPT;
-	OPscene scene;
 	OPrendererForward rendererForward;
 
 	Player* player;
@@ -15,6 +16,9 @@ class GameState : public OPgameState {
     void Render(OPfloat delta);
     OPint Exit(OPgameState* next);
 public:
+	OPscene scene;
+	DynamicAllocator<StaticEntity>* staticEntities;
+
 	void Wrap(Handle<Object> exports);
 	static void Wrapper(Handle<Object> exports);
 };

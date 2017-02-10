@@ -26,8 +26,9 @@ public:
 	GameEntityType entityType = NOTDEFINED;
 	virtual void Update(OPtimer* timer) = 0;
 	virtual void PrepRender(OPfloat delta) = 0;
-	virtual Handle<Object> Wrap(Handle<Object> result) = 0;
-protected:
+	virtual Handle<Object> Wrap(Handle<Object> result);
+
+	OPrendererEntity* rendererEntity = NULL;
 	OPvec3 position = OPvec3(0), prevPosition = OPvec3(0);
 	OPvec3 scale = OPvec3(1), prevScale = OPvec3(1);
 	OPvec3 rotate = OPvec3(0), prevRotate = OPvec3(0);

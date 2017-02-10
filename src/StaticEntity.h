@@ -2,20 +2,18 @@
 
 #include "./OPengine.h"
 #include "GameEntity.h"
-#include "ControlsManager.h"
 
-class Player : GameEntity {
+class StaticEntity : public GameEntity {
 private:
-	OPphysXController* physX;
-	PxShape* shapes;
-	ControlsManager controls;
-
 	i32 health;
 
 public:
-	Player(OPscene* scene);
+	OPphysXRigidStatic* physX;
+	PxShape* shapes;
+	OPrendererEntity* rendererEntity;
+
+	void Init(OPscene* scene, const OPchar* model, const OPchar* texture);
 	void Update(OPtimer* timer);
 	void PrepRender(OPfloat delta);
-	void Player::RenderDebug();
 	Handle<Object> Wrap(Handle<Object> result);
 };

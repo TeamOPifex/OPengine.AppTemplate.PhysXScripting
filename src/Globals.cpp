@@ -16,4 +16,6 @@ void GlobalsInit() {
 	OPphysXMaterial* material = OPphysXCreateMaterial(0.8, 0.8, 0.1);
 	OPphysXSceneAddWalls(PHYSX_SCENE, -25, 25, 25, -25, material, true);
 	OPphysXSceneUpdate(PHYSX_SCENE, 16);
+	
+	OPphysXDebugger("127.0.0.1");
 }

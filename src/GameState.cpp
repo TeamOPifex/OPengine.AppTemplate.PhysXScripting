@@ -9,6 +9,7 @@ void GameState::Init(OPgameState* last) {
 
 
 	player = OPNEW(Player(&scene));
+	staticEntities = OPNEW(DynamicAllocator<StaticEntity>(128));
 
 
 	SCOPE_AND_ISOLATE;
@@ -46,6 +47,58 @@ OPint GameState::Exit(OPgameState* next) {
 }
 
 
+JS_HELPER_SELF_WRAPPER(_SceneEntitySetTransform) {
+	SCOPE_AND_ISOLATE;
+
+	OPrendererEntity* ptr = JS_NEXT_ARG_AS(OPrendererEntity);
+	OPvec3 pos = JS_NEXT_ARG_AS_VEC3;
+	OPvec3 rot = JS_NEXT_ARG_AS_VEC3;
+	OPvec3 scl = JS_NEXT_ARG_AS_VEC3;
+
+	ptr->world.
+		SetRotY(rot.y)->
+		RotZ(rot.z)->
+		RotX(rot.x)->
+		Translate(pos)->
+		Scl(scl);
+
+	JS_RETURN_NULL;
+}
+
+JS_HELPER_SELF_WRAPPER(_GameStateAddDrawable) {
+	SCOPE_AND_ISOLATE;
+
+	GameState* ptr = JS_NEXT_ARG_AS(GameState);
+	JS_NEXT_ARG_AS_STRING(model);
+	JS_NEXT_ARG_AS_STRING(texture);
+
+	OPrendererEntity* sceneEntity = ptr->scene.Add((OPmodel*)OPCMAN.LoadGet(model), OPrendererEntityDesc(false));
+	sceneEntity->world = OPMAT4_IDENTITY;
+	sceneEntity->SetAlbedoMap(texture);
+
+
+	Handle<Object> result = JS_NEW_OBJECT();
+	JS_SET_PTR(result, sceneEntity);
+	Handle<Object> entity = JS_NEW_OBJECT();
+	JS_SET_PTR(entity, sceneEntity);
+	JS_SET_METHOD(entity, "SetTransform", _SceneEntitySetTransformSelf);
+	JS_SET_OBJECT(result, "Entity", entity);
+	JS_RETURN(result);
+}
+
+JS_HELPER_SELF_WRAPPER(_GameStateAddStatic) {
+	SCOPE_AND_ISOLATE;
+
+	GameState* ptr = JS_NEXT_ARG_AS(GameState);
+	JS_NEXT_ARG_AS_STRING(model);
+	JS_NEXT_ARG_AS_STRING(texture);
+
+	StaticEntity* entity = ptr->staticEntities->Next();
+	entity->Init(&ptr->scene, model, texture);
+	Handle<Object> obj = JS_NEW_OBJECT();
+	JS_RETURN(entity->Wrap(obj));
+}
+
 JS_RETURN_VAL _ExampleStateCreate(const JS_ARGS& args) {
 	SCOPE_AND_ISOLATE;
 
@@ -69,6 +122,8 @@ JS_HELPER_SELF_WRAPPER(_ExampleStateInit) {
 void GameState::Wrap(Handle<Object> result) {
 	JS_SET_PTR(result, this);
 	JS_SET_METHOD(result, "Init", _ExampleStateInitSelf);
+	JS_SET_METHOD(result, "AddDrawable", _GameStateAddDrawableSelf);
+	JS_SET_METHOD(result, "AddStatic", _GameStateAddStaticSelf);
 }
 
 void GameState::Wrapper(Handle<Object> exports) {
@@ -78,7 +133,7 @@ void GameState::Wrapper(Handle<Object> exports) {
 	Handle<Object> result = tpl->GetFunction();
 
 	JS_SET_NUMBER(result, "size", sizeof(GameState));
-	JS_SET_OBJECT(exports, "ExampleState", result);
+	JS_SET_OBJECT(exports, "GameState", result);
 }
 
 
