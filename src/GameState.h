@@ -1,10 +1,14 @@
 #pragma once
 
 #include "./OPengine.h"
+#include "Player.h"
 
-class ExampleState : public OPgameState {
-
+class GameState : public OPgameState {
 	OPjavaScriptV8Compiled SCRIPT;
+	OPscene scene;
+	OPrendererForward rendererForward;
+
+	Player* player;
 
     void Init(OPgameState* last);
     OPint Update(OPtimer* time);
@@ -15,4 +19,4 @@ public:
 	static void Wrapper(Handle<Object> exports);
 };
 
-extern ExampleState GS_EXAMPLE;
+extern GameState GS_EXAMPLE;

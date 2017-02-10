@@ -18,7 +18,7 @@ void GameWrapper(Handle<Object> exports) {
 	SCOPE_AND_ISOLATE;
 
 	Handle<Object> wrapper = JS_NEW_OBJECT();
-	ExampleState::Wrapper(wrapper);
+	GameState::Wrapper(wrapper);
 
 	JS_SET_OBJECT(exports, "ExampleState", wrapper);
 }
@@ -32,6 +32,12 @@ void ApplicationInit() {
 
 	OPwindowSystemInit();
 	mainWindow.Init(NULL, OPwindowParameters("Main Window", false, 1280, 720));
+
+	// Sound System initialize
+	//OPfmodInit();
+
+	// Physics Setup
+	OPphysXInit();
 
 	// Scripting Setup
 	OPJAVASCRIPTV8_CUSTOMWRAPPER = GameWrapper;
